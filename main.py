@@ -8,6 +8,7 @@ database_port = "5433"
 database_name = "healthrecords"
 database_user = "postgres"
 database_password = ""
+test = False
 def create_connection(db_name, db_user, db_password, db_host, db_port):
     connection = None
     try:
@@ -79,19 +80,22 @@ while True:
     parent = questionary.select("What parent dropped you off at school today?",choices=parents).ask()
 
     if questionary.confirm("Do you believe the data you entered is accurate to the best of your knowledge?").ask():
-        confirmed_details_accurate=True
-        connection = create_connection(database_name, database_user, database_password, database_ip_address, database_port)
-        if connection:
-            # Example of creating a cursor (used to execute SQL commands)
-                cursor = connection.cursor()
-                sql = """INSERT INTO main (field_data, depression_score, anxiety_score, stress_score, last_parent, comfirmed_details_accurate)
-                            VALUES (%s, %s, %s, %s, %s, %s);"""
-                cursor.execute(sql, (field_data, depression_score, anxiety_score, stress_score, parent, confirmed_details_accurate))
-                connection.commit()
-                cursor.close()
-                connection.close()
-                print("Connection closed")
-        break
+        if test:
+            break
+        else:
+            confirmed_details_accurate=True
+            connection = create_connection(database_name, database_user, database_password, database_ip_address, database_port)
+            if connection:
+                # Example of creating a cursor (used to execute SQL commands)
+                    cursor = connection.cursor()
+                    sql = """INSERT INTO main (field_data, depression_score, anxiety_score, stress_score, last_parent, comfirmed_details_accurate)
+                                VALUES (%s, %s, %s, %s, %s, %s);"""
+                    cursor.execute(sql, (field_data, depression_score, anxiety_score, stress_score, parent, confirmed_details_accurate))
+                    connection.commit()
+                    cursor.close()
+                    connection.close()
+                    print("Connection closed")
+            break
     else:
         print("[red][bold]Restarting form...[/bold][/red]")
 
