@@ -6,8 +6,8 @@ lightweight and eficcient using python3
 
 > ## Requirements
 >
-> psycopg2
-> matplotlib
-> questionary
-> json
+> psycopg2  
+> matplotlib  
+> questionary  
+> json  
 > rich
